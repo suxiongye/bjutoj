@@ -28,4 +28,5 @@
         @endforeach
         </tbody>
     </table>
+    <a href="{{URL('problems/refresh')}}">Refresh</a>
 @stop

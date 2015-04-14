@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers\Problem;
+namespace App\Controllers\Admin;
 use Problem;
 use Auth, BaseController, Request,Form, Input, Redirect, Sentry, View;
 
@@ -13,7 +13,7 @@ class ProblemsController extends BaseController {
 	 */
 	public function index()
 	{
-        return \View::make('problems.index')->with('problems',Problem::all());
+        return \View::make('home')->with('problems',Problem::all());
 	}
 
 	/**
@@ -122,7 +122,6 @@ class ProblemsController extends BaseController {
 	{
 		//
         $problem = Problem::find($id);
-        $this->deleteFile($problem->id);
         $problem->delete();
         return Redirect::route('problems.index');
 	}
@@ -140,24 +139,14 @@ class ProblemsController extends BaseController {
     {
         $fp=fopen("D:\\Apache24\\htdocs\\bjutoj\\corefiles\\problems\\$problem->id.txt",'w');
         if(!$fp) return false;
-        fwrite($fp,"Problem Title:$problem->title \n Problem Content:$problem->content\n");
+        fwrite($fp,"$problem->title \n $problem->content");
         fclose($fp);
         $fp = fopen("D:\\Apache24\\htdocs\\bjutoj\\corefiles\\inputcases\\$problem->id.txt",'w');
-        fwrite($fp,"$problem->inputcase\n");
+        fwrite($fp,"$problem->inputcase");
         fclose($fp);
         $fp = fopen("D:\\Apache24\\htdocs\\bjutoj\\corefiles\\outputcases\\$problem->id.txt",'w');
         fwrite($fp,"$problem->outputcase");
         fclose($fp);
         return true;
-    }
-    public function deleteFile($id)
-    {
-        try {
-            unlink("D:\\Apache24\\htdocs\\bjutoj\\corefiles\\problems\\$id.txt");
-        }
-        catch(\Exception $e)
-        {
-
-        }
     }
 }

@@ -12,10 +12,11 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a href="#">RankList</a>
+                <a href="{{URL('ranklist')}}">RankList</a>
                 <a class="brand" href="{{URL('problems/index')}}">Problems</a>
-                <a href="#">Codes</a>
-
+                <a href="{{URL('codes/index')}}">Codes</a>
+                <a href="{{URL('admin/logout')}}">Logout</a>
+                <a href="{{URL('admin/login')}}">Login</a>
                 @include('_partials.navigation')
 
             </div>

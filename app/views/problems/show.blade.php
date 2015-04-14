@@ -26,7 +26,7 @@
         problem timelimit = {{ $problem->timelimit }}
         problem memorylimit = {{$problem->memorylimit}}
     </div>
-    <a href="#">Submit</a>
+    <a href="{{URL('codes/create',$problem->id)}}">Submit</a>
     <a href="{{URL('/')}}">Return</a>
 
 @stop

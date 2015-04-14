@@ -14,11 +14,11 @@
 
         <div class="control-group">
 
-            {{ Form::label('email', 'Email') }}
+            {{ Form::label('username', 'Username') }}
 
             <div class="controls">
 
-                {{ Form::text('email') }}
+                {{ Form::text('username') }}
 
             </div>
         </div>
@@ -41,7 +41,7 @@
         </div>
 
         {{ Form::close() }}
-
+    <a href="{{URL('/')}}">Return</a>
     </div>
 
 @stop

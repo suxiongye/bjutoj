@@ -8,7 +8,7 @@ class SolveTableSeeder extends Seeder {
 	public function run()
 	{
 		$faker = Faker::create();
-
+        DB::table('solves')->delete();
 		foreach(range(1, 10) as $index)
 		{
 			Solve::create([

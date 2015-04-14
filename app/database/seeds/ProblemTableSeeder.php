@@ -8,6 +8,7 @@ class ProblemTableSeeder extends Seeder {
 	public function run()
 	{
 		$faker = Faker::create();
+        DB::table('problems')->delete();
 		foreach(range(1, 10) as $index)
 		{
 			Problem::create([

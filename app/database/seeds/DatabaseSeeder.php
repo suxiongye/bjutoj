@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('ProblemTableSeeder');
         $this->call('SolveTableSeeder');
         $this->call('CodeTableSeeder');
+        $this->call('SentrySeeder');
 	}
 
 }

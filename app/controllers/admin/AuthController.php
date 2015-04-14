@@ -11,6 +11,10 @@ class AuthController extends BaseController{
      */
     public function getLogin()
     {
+        if(Sentry::check())
+        {
+            return Redirect::route('admin.problems.index');
+        }
         return View::make('admin.auth.login');
     }
 
@@ -21,7 +25,7 @@ class AuthController extends BaseController{
     public function postLogin()
     {
         $credentials = array(
-            'email'    => Input::get('email'),
+            'username'    => Input::get('username'),
             'password' => Input::get('password')
         );
 

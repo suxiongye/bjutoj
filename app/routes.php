@@ -16,14 +16,33 @@ Route::get('/', function()
 */
 
 Route::get('/','App\Controllers\HomeController@index');
-Route::get('problems/index',array('as' => 'problems.index', 'uses' => 'App\Controllers\Problem\ProblemsController@index'));
-Route::get('problems/edit/{id}','App\Controllers\Problem\ProblemsController@edit');
-Route::get('problems/delete/{id}','App\Controllers\Problem\ProblemsController@destroy');
-Route::get('problems/show/{id}',array('as' => 'problems.show', 'uses' => 'App\Controllers\Problem\ProblemsController@show'));
-Route::post('problems/update/{id}','App\Controllers\Problem\ProblemsController@update');
-Route::post('problems/store','App\Controllers\Problem\ProblemsController@store');
-Route::get('problems/create','App\Controllers\Problem\ProblemsController@create');
-Route::get('problems/store','App\Controllers\Problem\ProblemsController@store');
+Route::get('ranklist','App\Controllers\HomeController@rankList');
+Route::group(array('prefix'=>'problems','before'=>'auth.admin'),function()
+{
+    //problems route
+    Route::get('index',array('as' => 'problems.index', 'uses' => 'App\Controllers\Problem\ProblemsController@index'));
+    Route::get('edit/{id}','App\Controllers\Problem\ProblemsController@edit');
+    Route::get('delete/{id}','App\Controllers\Problem\ProblemsController@destroy');
+    Route::get('show/{id}',array('as' => 'problems.show', 'uses' => 'App\Controllers\Problem\ProblemsController@show'));
+    Route::post('update/{id}','App\Controllers\Problem\ProblemsController@update');
+    Route::post('store','App\Controllers\Problem\ProblemsController@store');
+    Route::get('create','App\Controllers\Problem\ProblemsController@create');
+    Route::get('store','App\Controllers\Problem\ProblemsController@store');
+    Route::get('refresh','App\Controllers\Problem\ProblemsController@refresh');
+}
+);
+
+Route::group(array('prefix'=>'codes','before'=>'auth.admin'),function() {
+//codes route
+    Route::get('index',array('as'=>'codes.index','uses'=>'App\Controllers\Code\CodesController@index'));
+    Route::get('show/{id}',array('as'=>'codes.show','uses'=>'App\Controllers\Code\CodesController@show'));
+    Route::get("/create/{id}",array('as'=>'codes.create','uses'=>'App\Controllers\Code\CodesController@create'));
+    Route::post("store",array('as'=>'codes.store','uses'=>'App\Controllers\Code\CodesController@store'));
+    Route::get('refresh','App\Controllers\Code\CodesController@refresh');
+}
+);
+
+
 Route::get('admin/logout', array('as' => 'admin.logout', 'uses' => 'App\Controllers\Admin\AuthController@getLogout'));
 Route::get('admin/login', array('as' => 'admin.login', 'uses' => 'App\Controllers\Admin\AuthController@getLogin'));
 Route::post('admin/login', array('as' => 'admin.login.post', 'uses' => 'App\Controllers\Admin\AuthController@postLogin'));
