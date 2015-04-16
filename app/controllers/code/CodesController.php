@@ -2,6 +2,7 @@
 namespace App\Controllers\Code;
 use Problem, Code;
 use Auth, BaseController, Request,Form, Input, Redirect, Sentry, View;
+use App\Services\Validators\CodeValidator;
 
 class CodesController extends BaseController {
 
@@ -13,7 +14,14 @@ class CodesController extends BaseController {
 	 */
 	public function index()
 	{
-        return \View::make('codes.index')->with('codes',Code::all());
+        if(Sentry::getUser()->hasAccess('admin'))
+        {
+            $power = 1;
+        }
+        else{
+            $power = -1;
+        }
+        return \View::make('codes.index')->with('codes',Code::paginate(10))->with('power',$power)->with('user',Sentry::getUser());
 	}
 
 	/**
@@ -35,21 +43,26 @@ class CodesController extends BaseController {
 	 */
 	public function store()
 	{
-		//
-        $code = new Code;
-        $code->content = Input::get('content');
-        $code->pro_id = Input::get('pro_id');
-        $code->user_id = Sentry::getUser()->id;
-        $code->status = "Waiting";
-        $code->remarks = "";
-        if($code->save())
-        {
-            $this->saveInFile($code);
-            return Redirect::route('codes.show',$code->id);
+		$validation = new CodeValidator;
+        if($validation->passes()) {
+            $code = new Code;
+            $user = Sentry::getUser();
+            $code->content = Input::get('content');
+            $code->pro_id = Input::get('pro_id');
+            $code->user_id = $user->id;
+            $code->status = "Waiting";
+            $code->remarks = "";
+            $user->submit++;
+            if ($code->save()) {
+                $this->saveInFile($code);
+                $user->save();
+                return Redirect::route('codes.show', $code->id);
+            } else {
+                return Redirect::back()->withInput()->withErrors("Save error");
+            }
         }
-        else
-        {
-            return Redirect::back()->withInput()->withErrors("Save error");
+        else {
+            return Redirect::back()->withInput()->withErrors("The content can't be empty");
         }
 	}
 
@@ -115,7 +128,14 @@ class CodesController extends BaseController {
                 $this->saveInFile($code);
             }
         }
-        return \View::make('codes/index')->with('codes',$codes);
+        if(Sentry::getUser()->hasAccess('admin'))
+        {
+            $power = 1;
+        }
+        else{
+            $power = -1;
+        }
+        return Redirect::route('codes.index');
     }
 
     public function saveInFile(Code $code)

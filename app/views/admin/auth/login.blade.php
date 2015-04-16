@@ -35,13 +35,9 @@
         </div>
 
         <div class="form-actions">
-
             {{ Form::submit('Login', array('class' => 'btn btn-inverse btn-login')) }}
-
+            <a href="{{URL('/')}}" class="btn btn-inverse btn-login">Return</a>
+            {{ Form::close() }}
         </div>
-
-        {{ Form::close() }}
-    <a href="{{URL('/')}}">Return</a>
     </div>
-
 @stop

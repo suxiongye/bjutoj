@@ -23,12 +23,12 @@ class HomeController extends \BaseController {
 
     public function index()
     {
-        return \View::make('home')->with('problems',Problem::all());
+        return \View::make('home')->with('problems',Problem::paginate(10));
     }
 
     public function rankList()
     {
-        return \View::make('ranklist')->with('users',User::where('id','>',0)->orderBy('solved','desc')->orderBy('submit')
-            ->get());
+        return \View::make('ranklist')->with('users',User::where('id','>',0)
+            ->orderBy('solved','desc')->orderBy('submit') ->paginate(10));
     }
 }

@@ -1,12 +1,10 @@
 @extends('_layouts.default')
 
 @section('main')
-    RankList
-    <table class="">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>Rank</th>
-            <th>User_id</th>
             <th>Username</th>
             <th>solved</th>
             <th>submit</th>
@@ -18,8 +16,7 @@
         @foreach ($users as $user)
             <tr>
                 <td>{{$i++}}</td>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->username }}</td>
+                <td><a href="{{URL('users/show/'.$user->id)}}">{{ $user->username }}</a></td>
                 <td>{{ $user->solved }}</td>
                 <td>{{$user->submit}}</td>
                 @if($user->submit!=0)
@@ -31,4 +28,5 @@
         @endforeach
         </tbody>
     </table>
+    <div>{{$users->links()}}</div>
 @stop

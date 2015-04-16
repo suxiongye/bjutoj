@@ -32,6 +32,17 @@ Route::group(array('prefix'=>'problems','before'=>'auth.admin'),function()
 }
 );
 
+Route::group(array('prefix'=>'users','before'=>'auth.admin'),function() {
+    //users route
+    Route::get('index',array('as' => 'users.index', 'uses' => 'App\Controllers\User\UsersController@index'));
+    Route::get('create','App\Controllers\User\UsersController@create');
+    Route::get('edit/{id}','App\Controllers\User\UsersController@edit');
+    Route::get('delete/{id}','App\Controllers\User\UsersController@destroy');
+    Route::get('show/{id}',array('as' => 'users.show', 'uses' => 'App\Controllers\User\UsersController@show'));
+    Route::post('update/{id}','App\Controllers\User\UsersController@update');
+    Route::get('refresh','App\Controllers\User\UsersController@refresh');
+});
+
 Route::group(array('prefix'=>'codes','before'=>'auth.admin'),function() {
 //codes route
     Route::get('index',array('as'=>'codes.index','uses'=>'App\Controllers\Code\CodesController@index'));
@@ -46,7 +57,8 @@ Route::group(array('prefix'=>'codes','before'=>'auth.admin'),function() {
 Route::get('admin/logout', array('as' => 'admin.logout', 'uses' => 'App\Controllers\Admin\AuthController@getLogout'));
 Route::get('admin/login', array('as' => 'admin.login', 'uses' => 'App\Controllers\Admin\AuthController@getLogin'));
 Route::post('admin/login', array('as' => 'admin.login.post', 'uses' => 'App\Controllers\Admin\AuthController@postLogin'));
-
+Route::get('admin/register',array('as'=>'admin.register','uses' => 'App\Controllers\Admin\AuthController@create'));
+Route::post('admin/store',array('as'=>'admin.store','uses'=>'App\Controllers\Admin\AuthController@store'));
 Route::group(array('prefix' => 'admin', 'before' => 'auth.admin'), function()
 {
     Route::any('/', 'App\Controllers\Admin\ProblemsController@index');

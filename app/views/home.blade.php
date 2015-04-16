@@ -1,15 +1,14 @@
 @extends('_layouts.default')
 
 @section('main')
-    problems list
-    <table class="">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>#</th>
             <th>Title</th>
-            <th>radio</th>
-            <th>accepted</th>
-            <th>submit</th>
+            <th>Radio</th>
+            <th>Accepted</th>
+            <th>Submit</th>
         </tr>
         </thead>
         <tbody>
@@ -24,4 +23,5 @@
         @endforeach
         </tbody>
     </table>
+    <div>{{$problems->links()}}</div>
 @stop

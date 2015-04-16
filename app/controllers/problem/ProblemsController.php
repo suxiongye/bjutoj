@@ -2,9 +2,9 @@
 namespace App\Controllers\Problem;
 use Problem;
 use Auth, BaseController, Request,Form, Input, Redirect, Sentry, View;
+use App\Services\Validators\ProblemValidator;
 
 class ProblemsController extends BaseController {
-
 	/**
 	 * Display a listing of the resource.
 	 * GET /admin/problems
@@ -13,7 +13,14 @@ class ProblemsController extends BaseController {
 	 */
 	public function index()
 	{
-        return \View::make('problems.index')->with('problems',Problem::all());
+        if(Sentry::getUser()->hasAccess('admin'))
+        {
+            $power = 1;
+        }
+        else{
+            $power = -1;
+        }
+        return \View::make('problems.index')->with('problems',Problem::paginate(10))->with('power',$power);
 	}
 
 	/**
@@ -35,27 +42,33 @@ class ProblemsController extends BaseController {
 	 */
 	public function store()
 	{
-		//
-        $problem = new Problem;
-        $problem->title = Input::get('title');
-        $problem->content = Input::get('content');
-        $problem->inputcase = Input::get('inputcase');
-        $problem->outputcase = Input::get('outputcase');
-        $problem->timelimit = Input::get('timelimit');
-        $problem->memorylimit = Input::get('memorylimit');
-        $problem->radio = 0.0;
-        $problem->accepted = 0;
-        $problem->submit = 0;
-        if($problem->save())
+        $validation = new ProblemValidator;
+        if($validation->passes())
         {
-            $this->saveInFile($problem);
-            return Redirect::route('problems.show',$problem->id);
+            $problem = new Problem;
+            $problem->title = Input::get('title');
+            $problem->content = Input::get('content');
+            $problem->inputcase = Input::get('inputcase');
+            $problem->outputcase = Input::get('outputcase');
+            $problem->timelimit = Input::get('timelimit');
+            $problem->memorylimit = Input::get('memorylimit');
+            $problem->radio = 0.0;
+            $problem->accepted = 0;
+            $problem->submit = 0;
+            if($problem->save())
+            {
+                $this->saveInFile($problem);
+                return Redirect::route('problems.show',$problem->id);
+            }
+            else
+            {
+                return Redirect::back()->withInput()->withErrors("Save error");
+            }
         }
         else
         {
             return Redirect::back()->withInput()->withErrors("Save error");
         }
-       // $problem->
 	}
 
 	/**
@@ -92,18 +105,24 @@ class ProblemsController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$problem = Problem::find($id);
-        $problem->title = Input::get('title');
-        $problem->content = Input::get('content');
-        $problem->inputcase = Input::get('inputcase');
-        $problem->outputcase = Input::get('outputcase');
-        $problem->timelimit = Input::get('timelimit');
-        $problem->memorylimit = Input::get('memorylimit');
+        $validation = new ProblemValidator;
+        if($validation->passes()) {
+            $problem = Problem::find($id);
+            $problem->title = Input::get('title');
+            $problem->content = Input::get('content');
+            $problem->inputcase = Input::get('inputcase');
+            $problem->outputcase = Input::get('outputcase');
+            $problem->timelimit = Input::get('timelimit');
+            $problem->memorylimit = Input::get('memorylimit');
 
-        if($problem->save() && $this->saveInFile($problem))
-        {
+            if ($problem->save() && $this->saveInFile($problem)) {
 
-            return Redirect::route('problems.show',$problem->id);
+                return Redirect::route('problems.show', $problem->id);
+            }
+            else
+            {
+                return Redirect::back()->withInput()->withErrors("Save error");
+            }
         }
         else
         {
@@ -129,12 +148,19 @@ class ProblemsController extends BaseController {
 
     public function refresh()
     {
-        $problems = Problem::all();
+        $problems =Problem::paginate(10);
         foreach($problems as $problem)
         {
             $this->saveInFile($problem);
         }
-        return \View::make('problems/index')->with('problems',$problems);
+        if(Sentry::getUser()->hasAccess('admin'))
+        {
+            $power = 1;
+        }
+        else{
+            $power = -1;
+        }
+        return \View::make('problems/index')->with('problems',$problems)->with('power',$power);
     }
     public function saveInFile(Problem $problem)
     {

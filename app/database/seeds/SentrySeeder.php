@@ -43,7 +43,7 @@ class SentrySeeder extends Seeder
         Sentry::getGroupProvider()->create(
             array(
                 'name'    =>  'Student',
-                'permissions'=>['admin'=>1]
+                'permissions'=>['student'=>1]
             )
         );
 

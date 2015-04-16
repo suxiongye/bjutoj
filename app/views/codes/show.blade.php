@@ -1,28 +1,38 @@
 @extends('_layouts.default')
 
 @section('main')
+    <div id="onepage">
+        <div class="control-group">
+            <h2>Code Id</h2>
+            <div class="controls">
+                {{$code->id}}
+            </div>
+        </div>
+        <div class="control-group">
+            <h2>Problem Id</h2>
+            <div class="controls">
+                {{$code->pro_id}}
+            </div>
+        </div>
+        <div class="control-group">
+            <h2>Code Content</h2>
+            <div class="controls">
+                {{$code->content}}
+            </div>
+        </div>
 
-    <h2>Code</h2>
-
-    <div id="">
-        Code id = {{$code->id}}
-        <hr/>
-        problem Id
-        <div class="">
-            <h3>{{ $code->pro_id }}</h3>
+        <div class="control-group">
+            <h2>Code Status</h2>
+            <div class="controls">
+                {{$code->status}}
+            </div>
         </div>
-        code content
-        <div class="">
-           {{$code->content}}
+        <div class="control-group">
+            <h2>Code Remarks</h2>
+            <div class="controls">
+                {{$code->remarks}}
+            </div>
         </div>
-        code status
-        <div class="body">
-            {{ $code->status }}
-        </div>
-        code remarks
-        <div class="body">
-            {{ $code->remarks }}
-        </div>
-    <a href="{{URL('codes/index')}}">Return</a>
+    <a href="{{URL('codes/index')}}" class="btn btn-primary">Return</a>
 
 @stop

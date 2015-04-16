@@ -2,6 +2,7 @@
 namespace App\Controllers\Admin;
 
 use Auth, BaseController, Form, Input, Redirect, Sentry, View;
+use App\Services\Validators\RegisterValidator;
 
 class AuthController extends BaseController{
 
@@ -13,7 +14,7 @@ class AuthController extends BaseController{
     {
         if(Sentry::check())
         {
-            return Redirect::route('admin.problems.index');
+            return Redirect::route('problems.index');
         }
         return View::make('admin.auth.login');
     }
@@ -35,7 +36,7 @@ class AuthController extends BaseController{
 
             if ($user)
             {
-                return Redirect::route('admin.problems.index');
+                return Redirect::route('problems.index');
             }
         }
         catch(\Exception $e)
@@ -73,7 +74,7 @@ class AuthController extends BaseController{
 	 */
 	public function create()
 	{
-		//
+        return  \View::make('users.create');
 	}
 
 	/**
@@ -84,7 +85,30 @@ class AuthController extends BaseController{
 	 */
 	public function store()
 	{
-		//
+        $validation = new RegisterValidator;
+        if(Input::get('password')==null||Input::get('password')!=Input::get("password2"))
+        {
+            return Redirect::back()->withInput()->withErrors("The password should be same and at least 5 character");
+        }
+        if($validation->passes()) {
+            $user = Sentry::createUser(array(
+                'username' => Input::get('username'),
+                'password' => Input::get('password'),
+                'solved' => 0,
+                'submit' => 0,
+                'activated' => true,
+            ));
+            if (Input::get('code') == 'teacher') {
+                $group = Sentry::findGroupByName('Admin');
+            } else {
+                $group = Sentry::findGroupByName('Student');
+            }
+            $user->addGroup($group);
+            return Redirect::route('admin.login');
+        }
+        else{
+            return Redirect::back()->withInput()->withErrors("The username exist");
+        }
 	}
 
 	/**
@@ -132,7 +156,7 @@ class AuthController extends BaseController{
 	 */
 	public function destroy($id)
 	{
-		//
+
 	}
 
 }

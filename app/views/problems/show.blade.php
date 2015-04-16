@@ -1,32 +1,51 @@
 @extends('_layouts.default')
 
 @section('main')
-
-    <h2>Problem</h2>
-
-    <div id="">
-        problem id = {{$problem->id}}
-        <hr/>
-        problem title
-        <div class="">
-            <h3>{{ $problem->title }}</h3>
+    <div id="onepage">
+        <div class="control-group">
+            <h2>Problem ID</h2>
+            <div class="controls">
+             {{$problem->id}}
+            </div>
         </div>
-        problem content
-        <div class="">
+        <div class="control-group">
+            <h2>Problem Title</h2>
+            <div class="controls">
+                {{ $problem->title }}
+            </div>
+        </div>
+        <div class="control-group">
+            <h2>Content</h2>
+            <div class="controls">
            {{$problem->content}}
+            </div>
         </div>
-        problem input case
-        <div class="body">
-            {{ $problem->inputcase }}
+        <div class="control-group">
+            <h2>Input Case</h2>
+            <div class="controls">
+                {{ $problem->inputcase }}
+            </div>
         </div>
-        problem output case
-        <div class="body">
+        <div class="control-group">
+            <h2>Output Case</h2>
+            <div class="controls">
             {{ $problem->outputcase }}
+            </div>
         </div>
-        problem timelimit = {{ $problem->timelimit }}
-        problem memorylimit = {{$problem->memorylimit}}
+        <div class="control-group">
+            <h2>Time Limit</h2>
+            <div class="controls">
+            {{ $problem->timelimit }}
+            </div>
+        </div>
+        <div class="control-group">
+            <h2> Memory Limit</h2>
+            <div class="controls">
+                {{ $problem->memorylimit }}
+            </div>
+        </div>
     </div>
-    <a href="{{URL('codes/create',$problem->id)}}">Submit</a>
-    <a href="{{URL('/')}}">Return</a>
+    <a href="{{URL('codes/create',$problem->id)}}" class="btn btn-primary">Submit</a>
+    <a href="{{URL('/')}}" class="btn btn-primary">Return</a>
 
 @stop

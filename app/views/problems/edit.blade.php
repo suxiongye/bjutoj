@@ -11,19 +11,48 @@
     @endif
     <form action="{{ URL('problems/update/'.$problem->id) }}" method="POST">
         <input name="_method" type="hidden" value="POST">
-        <input type="text" name="title" class="form-control" required="required" value="{{ $problem->title }}">
-        <input type="text" name="timelimit" class="form-control" required="required" value="{{ $problem->timelimit }}">
-        <input type="text" name="memorylimit" class="form-control" required="required" value="{{ $problem->memorylimit }}">
-        <br>
-        <textarea name="content" rows="10" class="form-control" required="required">{{ $problem->content }}</textarea>
-        <br>
-        <br>
-        <textarea name="inputcase" rows="10" class="form-control" required="required">{{ $problem->inputcase }}</textarea>
-        <br>
-        <br>
-        <textarea name="outputcase" rows="10" class="form-control" required="required">{{ $problem->outputcase }}</textarea>
-        <br>
-        <a href="{{URL('problems/index')}}">Cancel</a>
-        <button class="btn btn-lg btn-info">Save</button>
+        <div class="control-group">
+            {{ Form::label('title', 'Title') }}
+            <div class="controls">
+                <input type="text" name="title"  value="{{ $problem->title }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            {{ Form::label('timelimit', 'TimeLimit(s)') }}
+            <div class="controls">
+                <input type="text" name="timelimit" value="{{ $problem->timelimit }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            {{ Form::label('memorylimit', 'MemoryLimit(M)') }}
+            <div class="controls">
+                <input type="text" name="memorylimit" value="{{ $problem->memorylimit }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            {{ Form::label('body', 'Content') }}
+            <div class="controls">
+                <textarea name="content" rows="10" cols="100" >{{ $problem->content }}</textarea>
+            </div>
+        </div>
+        <div class="control-group">
+            {{ Form::label('inputcase', 'InputCase') }}
+            <div class="controls">
+        <textarea name="inputcase" rows="10">{{ $problem->inputcase }}</textarea>
+            </div>
+        </div>
+        <div class="control-group">
+            {{ Form::label('outputcase', 'OutputCase') }}
+            <div class="controls">
+        <textarea name="outputcase" rows="10">{{ $problem->outputcase }}</textarea>
+            </div>
+        </div>
+        <div class="form-actions">
+        <a href="{{URL('problems/index')}}" class="btn btn-lg btn-info">Cancel</a>
+            <input type="submit" class="btn btn-lg btn-info" value="Save">
+        </div>
     </form>
 @stop
